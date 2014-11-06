@@ -1,0 +1,19 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% from "shows_macro.html" import display_show, show_table, show_table_end %}
+
+{% block content %}
+	<div class="units-row">
+		<div class="unit-centered unit-75">
+			{% if shows %}
+				{% for show in shows %}
+					<h2>{{show.name}}</h2>
+					{{ show_table() }}
+					{{ display_show(show, all) }}		
+					{{ show_table_end() }}
+				{% endfor %}		
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock content %}

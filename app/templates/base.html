@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/kube.css') }}">
+  	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+
+  </head>
+
+  <body>
+  		<div class="wrap">
+	  		<div id="header">
+	  			<div id="logo"><h1>plexWatchedWeb</h1></div>
+	  		</div>
+	  		<nav class="navbar">
+	  			<ul>
+		  			<li><a href="{{ url_for('index') }}">Home</a></li>
+		  			<li><a href="{{ url_for('shows') }}">Shows</a></li>
+		  			<li><a href="{{ url_for('movies') }}">Movies</a></li>
+		  			<li><a href="{{ url_for('sickbeard') }}">SickBeard</a></li>
+		  			<li><a href="{{ url_for('sabnzbd') }}">SabNZBd</a></li>
+		  			<li><a href="{{ url_for('config') }}">Config</a></li>
+	  			</ul>
+	  		</nav>
+		</div>
+		<div class="wrap">
+
+					{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+							{% for category, message in messages %}
+							{% if category == 'error' %}
+								<div class="errormsgbox">{{ message }}</div>
+							{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+
+		</div>
+		<div class="wrap">
+  	    	{% block content %}{% endblock content %}
+  	    </div>
+  	    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  	 	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+  	</body>
+</html>

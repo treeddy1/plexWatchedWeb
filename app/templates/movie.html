@@ -1,0 +1,12 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+	{{movie.name}} - {{movie.key}}
+	<img src="{{ url_for('static', filename='./cache/thumb-' + movie.id ) }}" width="150" height="225">
+	<img src="{{ url_for('static', filename='./cache/art-' + movie.id ) }}" width="150" height="225">
+	<p> 
+		{{movie.summary}}
+	</p>
+{% endblock content %}

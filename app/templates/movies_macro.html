@@ -1,0 +1,54 @@
+{% macro movie_table(movies, all = false) %}
+
+
+
+	<table id="movieTable" class="table-striped" cellspacing="1" border="0" cellpadding="2">
+	<thead>
+		<tr>
+			{% if request.endpoint == 'movies' %}
+				<th></th>
+			{% endif %}
+			<th>Movie Name</th>
+			<th>Watched</th>
+			<th>Progress</th>
+			<th>Delete</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td rowspan="1" colspan="3" class="align-right">
+				<input type="submit" value="Delete" id="submitEpisodeDelete" class="btn" onclick="return confirm('Are you sure you want to delete');" />
+			</td>
+			<td class="centered">
+				<input type="checkbox" id="deleteAll" class="deleteAllChk">
+			</td>
+		</tr>
+	</tfoot>
+
+
+	{% for movie in movies %}
+		{% if movie.watched or all %}
+			<tr>
+				{% if request.endpoint == 'movies' %}
+					<td><img src="{{ url_for('static', filename='./cache/thumb-' + movie.id ) }}" width="33" height="50"></td>
+				{% endif %}
+
+				<td>
+				<a href = "/movie/{{movie.id }}">{{movie.name}}</a>
+				<img src="{{ url_for('static', filename="images/plotinfo.png" ) }}" width="16" height"16" class="summary" title="{{movie.key}}-{{movie.summary}}">
+		  		</td>
+		  		<td class="centered">
+		  			{{movie.watched}}
+		  		</td>
+		  		<td>
+					<progress max="{{movie.duration}}" value="{{movie.viewOffset}}"></progress>
+				 </td>
+			  	<td class="centered">
+			  		<input type="checkbox" class="deleteCheck" name="movie-{{movie.id}}" value="{{movie.id}}" />
+			  	</td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+	</table>
+
+{% endmacro %}

@@ -1,0 +1,55 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+
+{% block content %}
+	<div class="units-row">
+		<div class="unit-centered unit-75">
+
+				<table id="sbDonloadErrorsTable" class="table-striped" cellspacing="1" border="0" cellpadding="2">
+				<thead>
+					<tr>
+						<th>Show Name</th>
+						<th>Season x Epi</th>
+						<th>Date Added</th>
+						<th>Status</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+
+				{% if sb_fails %}
+					{% for show in sb_fails %}
+						<tr>
+							<td>
+								{{show.show_name}}
+							</td>
+							<td>
+								{{show.season}}x{{show.episode}}
+							</td>
+							<td>
+								{{show.date}}
+							</td>
+							<td>
+								{{show.status}}
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td>
+							Nothing failed!!!
+						</td>
+						<td></td><td></td><td></td><td></td>
+					</tr>
+				{% endif %}
+
+
+
+
+		</div>
+	</div>
+
+{% endblock content %}

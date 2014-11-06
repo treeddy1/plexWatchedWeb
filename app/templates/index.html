@@ -1,0 +1,41 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% from "shows_macro.html" import display_show, show_table, show_table_end %}
+{% from "movies_macro.html" import movie_table %}
+
+{% block content %}
+	<form name="itemDeleteForm" method="POST" action="/delete">	
+		{% if shows %}
+		<div class="units-row">
+			<div class="unit-centered unit-90">
+
+				<h3>Shows</h3>
+				{% if request.endpoint == 'shows' %}
+					<a href="{{ url_for('shows') }}/all">All</a> - <a href="{{ url_for('shows') }}">Watched</a>
+				{% endif %}
+				{{ show_table() }}
+
+				{% for show in shows %}
+					{{ display_show(show, all) }}
+				{% endfor %}
+				
+				{{ show_table_end() }}
+			</div>
+		</div>
+		{% endif %}
+
+		{% if movies %}
+		<div class="units-row">
+			<div class="unit-centered unit-90">
+				<h3>Movies</h3>
+				{% if request.endpoint == 'movies' %}
+					<a href="{{ url_for('movies') }}/all">All</a> - <a href="{{ url_for('movies') }}">Watched</a>
+				{% endif %}
+				{{ movie_table(movies, all) }}
+			</div>
+		</div>
+		{% endif %}
+
+	</form>
+
+{% endblock content %}

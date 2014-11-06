@@ -1,0 +1,76 @@
+
+{% macro show_table() %}
+	
+
+	<table id="showEpisodeTable" class="table-striped" cellspacing="1" border="0" cellpadding="2">
+	<thead>
+		<tr>
+		{% if request.endpoint != 'show' %}
+			<th>Show Name</th>
+		{% endif %}
+			<th>Season x Epi</th>
+			<th>Air Date</th>
+			<th>Episode Name</th>
+			<th>Watched</th>
+			<th>Progress</th>
+			<th>
+				Delete
+			</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			{% if request.endpoint != 'show' %}
+				<td rowspan="1" colspan="6" class="align-right">
+			{% else %}
+				<td rowspan="1" colspan="5" class="align-right">
+			{% endif %}
+				<input type="submit" value="Delete" id="submitEpisodeDelete" class="btn" onclick="return confirm('Are you sure you want to delete');" />
+			</td>
+			<td class="centered">
+				<input type="checkbox" id="deleteAll" class="deleteAllChk">
+			</td>
+
+		</tr>
+	</tfoot>
+
+{% endmacro %}
+
+{% macro display_show(show, all = false) %}
+
+			{% for episode in show.episodes %}
+				{% if episode.watched or all %}
+					<tr>
+					{% if request.endpoint != 'show' %}
+						<td>
+						<a href = "/show/{{show.id}}">{{show.name}}</a>
+				  		</td>
+				  	{% endif %}
+				  		<td class="centered">
+							{{episode.season}} x {{episode.episodeNumber}}
+				  		</td>
+				  		<td>
+				  			{{episode.airDate}}
+				  		</td>
+				  		<td>
+				  			{{episode.name}}
+				  			<img src="{{ url_for('static', filename="images/plotinfo.png" ) }}" width="16" height"16" class="summary" title="{{episode.key}}-{{episode.summary}}">
+				  		</td>
+				  		<td class="centered">
+				  			{{episode.watched}}
+				  		</td>
+				  		<td>
+				  			<progress max="{{episode.duration}}" value="{{episode.viewOffset}}"></progress>
+				  		</td>
+					  	<td class="centered">
+					  		<input type="checkbox" class="deleteCheck" name="episode-{{episode.id}}" value="{{episode.id}}" />
+					  	</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+{% endmacro %}
+
+{% macro show_table_end() %}		
+	</table>
+
+{% endmacro %}

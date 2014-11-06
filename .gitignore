@@ -1,0 +1,8 @@
+# pWW User Related #
+####################
+app/static/cache/*
+config.ini
+app/application.cfg
+.todo
+*.pyc
+clean.py

@@ -1,0 +1,19 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+
+{% block content %}
+	<div class="units-row">
+		<div class="unit-centered unit-75">
+			{% if sab_fails %}
+				{% for show in sab_fails %}
+					<li>Error Downloading: {{ show['name'] }} {{show['fail_message'] }} </li>
+
+				{% endfor %}
+			{% else %}
+				Nothing failed!!!		
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock content %}

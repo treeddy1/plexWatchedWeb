@@ -1,0 +1,80 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+	<form name="configForm" method="POST" action="/config">	
+
+		<div class="units-row">
+
+				<h3>Web Interface</h3>
+				<fieldset>
+
+			      <div class="field-pair">
+			        <label class="nocheck clearfix" for="ip">
+			          <span class="component-title">Host Ip</span>
+			          <input type="text" name="ip" id="ip" value="{{config["IP"]}}"/>
+			        </label>
+			        <label class="nocheck clearfix">
+			          <span class="component-title">&nbsp;</span>
+			          <span class="component-desc">This is the ip address plexWatchWeb should listen on</span>
+			        </label>
+			      </div>
+			      <div class="field-pair alt">
+			        <label class="nocheck clearfix" for="port">
+			          <span class="component-title">Port</span>
+			          <input type="text" name="port" id="port" size="8" value="{{config["PORT"]}}"/>
+			        </label>
+			        <label class="nocheck clearfix">
+			          <span class="component-title">&nbsp;</span>
+			          <span class="component-desc">This is the port plexWatchWeb should listen on</span>
+			        </label>
+			      </div>
+
+				</fieldset>
+
+				<input type="submit"  value="Update Config" id="submitConfigUpdate" class="btn" />
+				<p> 
+				<h3>Plex Server</h3>
+
+				<fieldset>
+
+			      <div class="field-pair">
+			        <label class="nocheck clearfix" for="plex_host">
+			          <span class="component-title">IP and Port</span>
+			          <input type="text" name="plex_host" id="plex_host" value="{{config["PLEX_HOST"]}}"/>
+			        </label>
+			        <label class="nocheck clearfix">
+			          <span class="component-title">&nbsp;</span>
+			          <span class="component-desc">IP and Port number of the Plex Server (ie: 127.0.0.1:32400)</span>
+			        </label>
+			      </div>
+			      <div class="field-pair alt">
+			        <label class="nocheck clearfix" for="plex_user">
+			          <span class="component-title">Username</span>
+			          <input type="text" name="plex_user" id="plex_user" size="8" value="{{config["PLEX_USER"]}}"/>
+			        </label>
+			        <label class="nocheck clearfix">
+			          <span class="component-title">&nbsp;</span>
+			          <span class="component-desc">This is the Plex Username (if required)</span>
+			        </label>
+			      </div>
+			      <div class="field-pair">
+			        <label class="nocheck clearfix" for="plex_password">
+			          <span class="component-title">Password</span>
+			          <input type="password" name="plex_password" id="plex_password" size="8" value="8888888"/>
+			        </label>
+			        <label class="nocheck clearfix">
+			          <span class="component-title">&nbsp;</span>
+			          <span class="component-desc">This is the Plex Password (if required)</span>
+			        </label>
+			      </div>
+
+				</fieldset>
+
+				<input type="submit" value="Update Config" id="submitConfigUpdate" class="btn" />
+
+		</div>
+
+	</form>
+
+{% endblock content %}
