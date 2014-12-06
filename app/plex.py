@@ -21,6 +21,8 @@ class Plex(object):
 			self.authRequired = False
 
 		self.get_sections()
+		self.movieList = []
+		self.showList = []
 
 	def _get_plex_token(self):
 		url = "https://my.plexapp.com/users/sign_in.xml"
@@ -109,9 +111,10 @@ class Plex(object):
 				#print season.getAttribute('title')
 				newShow.episodes = self.get_episode_list(season)
 
-			showList.append(newShow)
+			self.showList.append(newShow)
 
-		return showList
+		#return self.showList
+		return True
 
 	def get_show_seasons(self, showKey):
 		#mycommand = show.getAttribute('key')
@@ -172,9 +175,10 @@ class Plex(object):
 			elif newMovie.watched:
 				newMovie.viewOffset = newMovie.duration
 			self.get_plex_images(newMovie)
-			movieList.append(newMovie)
+			self.movieList.append(newMovie)
 
-		return movieList
+		#return self.movieList
+		return True
 
 	def refesh_library(self):
 		sections = []

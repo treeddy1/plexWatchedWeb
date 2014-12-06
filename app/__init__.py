@@ -31,6 +31,8 @@ SABNZBD_HOST = app.config['SABNZBD_HOST']
 
 # Create Plex Object
 MYPLEX = Plex(PLEX_HOST, PLEX_USER, PLEX_PASSWORD)
+MYPLEX.get_shows()
+MYPLEX.get_movies()
 
 # Create SB Object
 MYSICKBEARD = SickBeard(SB_HOST, SB_APIKEY)
