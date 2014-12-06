@@ -5,8 +5,6 @@ import os, time, shutil
 @app.route('/')
 @app.route('/index')
 def index(type = ""):
-	#shows = MYPLEX.get_shows()
-	#movies = MYPLEX.get_movies()
 	sb_fails = MYSICKBEARD.find_not_downloaded()
 	sab_fails = MYSABNZBD.get_history_fail()
 
@@ -92,13 +90,7 @@ def delete():
 						pass
 				
 	MYPLEX.refesh_library()
-	time.sleep(.5)
 	return redirect(url_for('index'))
-
-
-
-
-
 
 
 @app.route('/sickbeard')
