@@ -159,21 +159,7 @@ class Plex(object):
 		mycommand = "/library/sections/%s/all" % (self.movieKey)
 		movies = self._send_to_plex(mycommand).getElementsByTagName('Video')
 		for movie in movies:
-			newMovie = Movie()
-			newMovie.name = movie.getAttribute('title')
-			newMovie.summary = movie.getAttribute('summary')
-			newMovie.key = movie.getAttribute('key')
-			newMovie.filePath = movie.childNodes[1].childNodes[1].getAttribute('file')
-			newMovie.id = movie.getAttribute('ratingKey')
-			newMovie.thumb = movie.getAttribute('thumb') 
-			newMovie.art = movie.getAttribute('art')
-			if movie.getAttribute('viewCount'):
-				newMovie.watched = True
-			newMovie.duration = movie.getAttribute('duration')
-			if movie.getAttribute('viewOffset'):
-				newMovie.viewOffset = movie.getAttribute('viewOffset')
-			elif newMovie.watched:
-				newMovie.viewOffset = newMovie.duration
+			newMovie = Movie(movie)
 			self.get_plex_images(newMovie)
 			self.movieList.append(newMovie)
 
