@@ -10,6 +10,19 @@ class Show(object):
 
 
 class MediaType(object):
+
+	def __init__(self, media):
+		self.name = media.getAttribute('title')
+		self.summary = media.getAttribute('summary')
+		self.key = media.getAttribute('key')
+		self.filePath = media.childNodes[1].childNodes[1].getAttribute('file')
+		self.id = media.getAttribute('ratingKey')
+		self.showKey = media.getAttribute('grandparentRatingKey')
+		self.watched = self._is_watched(media)
+		self.duration = media.getAttribute('duration')
+		self.viewOffset = self._set_viewOffset(media)
+
+
 	def _is_watched(self, media):
 		if media.getAttribute('viewCount'):
 			return True
@@ -26,31 +39,19 @@ class MediaType(object):
 
 
 class Episode(MediaType):
-	def __init__(self, episode, season):
-		self.name = episode.getAttribute('title')
-		self.summary = episode.getAttribute('summary')
-		self.key = episode.getAttribute('key')
-		self.season = season.getAttribute('index')
+	
+	def __init__(self, episode, seasonNumber):
+		
+		MediaType.__init__(self, episode)
+		self.season = seasonNumber
 		self.episodeNumber = episode.getAttribute('index')
 		self.airDate = episode.getAttribute('originallyAvailableAt')			
-		self.filePath = episode.childNodes[1].childNodes[1].getAttribute('file')
-		self.id = episode.getAttribute('ratingKey')
-		self.showKey = episode.getAttribute('grandparentRatingKey')
-		self.watched = self._is_watched(episode)
-		self.duration = episode.getAttribute('duration')
-		self.viewOffset = self._set_viewOffset(episode)
-
+		
 
 class Movie(MediaType):
+
 	def __init__(self, movie):
-		self.name = movie.getAttribute('title')
-		self.summary = movie.getAttribute('summary')
-		self.key = movie.getAttribute('key')
-		self.filePath = movie.childNodes[1].childNodes[1].getAttribute('file')
-		self.id = movie.getAttribute('ratingKey')
+		
+		MediaType.__init__(self, movie)
 		self.thumb = movie.getAttribute('thumb') 
 		self.art = movie.getAttribute('art')
-		self.watched = self._is_watched(movie)
-		self.duration = movie.getAttribute('duration')
-		self.viewOffset = self._set_viewOffset(movie)
-

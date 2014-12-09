@@ -109,7 +109,6 @@ class Plex(object):
 
 			self.showList.append(newShow)
 
-		#return self.showList
 		return True
 
 	def get_show_seasons(self, showKey):
@@ -118,12 +117,13 @@ class Plex(object):
 		
 
 	def get_episode_list(self, season):
+		seasonNumber = season.getAttribute('index')
 		seasonPath = season.getAttribute('key')
 		episodeList = []
 		episodes = self._send_to_plex(seasonPath).getElementsByTagName('Video')
 
 		for episode in episodes:
-			episodeNew = Episode(episode, season)
+			episodeNew = Episode(episode, seasonNumber)
 			episodeList.append(episodeNew)
 
 		return episodeList
@@ -138,7 +138,6 @@ class Plex(object):
 			self.get_plex_images(newMovie)
 			self.movieList.append(newMovie)
 
-		#return self.movieList
 		return True
 
 	def refesh_library(self):
