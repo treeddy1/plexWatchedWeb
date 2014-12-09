@@ -41,7 +41,7 @@ class Plex(object):
 
 
 		except (urllib2.URLError, IOError), e:
-			print "Warning: Couldn't contact Plex at: " + url 
+			print "_get_plex_token: Couldn't contact plex service at: " + url 
 			print e
 			
 
