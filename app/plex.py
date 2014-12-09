@@ -101,14 +101,10 @@ class Plex(object):
 		mycommand = "/library/sections/%s/all" % (self.showKey)
 		shows = self._send_to_plex(mycommand).getElementsByTagName('Directory')
 		for show in shows:
-			showName = show.getAttribute('title')
-			showKey = show.getAttribute('key')
-			newShow = Show(showName, showKey)
+			newShow = Show(show)
 			newShow.seasons = self.get_show_seasons(show.getAttribute('key'))
-			newShow.id = show.getAttribute('ratingKey')
 
 			for season in newShow.seasons:
-				#print season.getAttribute('title')
 				newShow.episodes = self.get_episode_list(season)
 
 			self.showList.append(newShow)
@@ -117,7 +113,6 @@ class Plex(object):
 		return True
 
 	def get_show_seasons(self, showKey):
-		#mycommand = show.getAttribute('key')
 		seasons = self._send_to_plex(showKey).getElementsByTagName('Directory')
 		return seasons
 		
@@ -128,29 +123,9 @@ class Plex(object):
 		episodes = self._send_to_plex(seasonPath).getElementsByTagName('Video')
 
 		for episode in episodes:
-			#create new Episode Instance
-			episodeNew = Episode()
-
-			#set the new Episode Attributes
-			episodeNew.name = episode.getAttribute('title')
-			episodeNew.summary = episode.getAttribute('summary')
-			episodeNew.key = episode.getAttribute('key')
-			episodeNew.season = season.getAttribute('index')
-			episodeNew.episodeNumber = episode.getAttribute('index')
-			episodeNew.airDate = episode.getAttribute('originallyAvailableAt')			
-			episodeNew.filePath = episode.childNodes[1].childNodes[1].getAttribute('file')
-			episodeNew.id = episode.getAttribute('ratingKey')
-			episodeNew.showKey = episode.getAttribute('grandparentRatingKey')
-			if episode.getAttribute('viewCount'):
-				episodeNew.watched = True
-			episodeNew.duration = episode.getAttribute('duration')
-			if episode.getAttribute('viewOffset'):
-				episodeNew.viewOffset = episode.getAttribute('viewOffset')
-			elif episodeNew.watched:
-				episodeNew.viewOffset = episodeNew.duration
-
-
+			episodeNew = Episode(episode, season)
 			episodeList.append(episodeNew)
+
 		return episodeList
 
 
