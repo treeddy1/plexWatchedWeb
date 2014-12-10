@@ -78,7 +78,7 @@ def delete():
 						if os.path.isfile(movie.filePath):
 							path = os.path.dirname(movie.filePath)
 							shutil.rmtree(path, ignore_errors=False)
-							MYPLEX.movieList.remove(movie)
+							del MYPLEX.movieList[movie.id]
 							#app.logger.info("Deleted movie: " + movie.filePath + "from disk")
 						else:
 							message = "Error: %s file not found" % movie.filePath
