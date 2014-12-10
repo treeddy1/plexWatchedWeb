@@ -1,6 +1,8 @@
 
 class Show(object):
+
 	def __init__(self, show):
+
 		self.name = show.getAttribute('title')
 		self.showKey = show.getAttribute('key')
 		self.id = show.getAttribute('ratingKey')
@@ -12,6 +14,7 @@ class Show(object):
 class MediaType(object):
 
 	def __init__(self, media):
+
 		self.name = media.getAttribute('title')
 		self.summary = media.getAttribute('summary')
 		self.key = media.getAttribute('key')
@@ -24,12 +27,14 @@ class MediaType(object):
 
 
 	def _is_watched(self, media):
+
 		if media.getAttribute('viewCount'):
 			return True
 		else:
 			return False
 	
 	def _set_viewOffset(self, media):
+
 		if media.getAttribute('viewOffset'):
 			return media.getAttribute('viewOffset')
 		elif self.watched:
@@ -39,14 +44,14 @@ class MediaType(object):
 
 
 class Episode(MediaType):
-	
+
 	def __init__(self, episode, seasonNumber):
 		
 		MediaType.__init__(self, episode)
 		self.season = seasonNumber
 		self.episodeNumber = episode.getAttribute('index')
-		self.airDate = episode.getAttribute('originallyAvailableAt')			
-		
+		self.airDate = episode.getAttribute('originallyAvailableAt')
+
 
 class Movie(MediaType):
 

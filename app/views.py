@@ -34,12 +34,12 @@ def show(id):
 
 @app.route('/movie/<id>')
 def movie(id):
-	myMovie = next(movie for movie in MYPLEX.movieList if movie.id == id)
+	myMovie	 = MYPLEX.movieList[id]
 	return render_template('movie.html', movie = myMovie)
 
 @app.route('/update')
 def update():
-	MYPLEX.movieList[:] = []
+	MYPLEX.movieList.clear()
 	MYPLEX.showList[:] =[]
 	MYPLEX.get_movies()
 	MYPLEX.get_shows()

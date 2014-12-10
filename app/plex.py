@@ -21,7 +21,7 @@ class Plex(object):
 			self.authRequired = False
 
 		self.get_sections()
-		self.movieList = []
+		self.movieList = {}
 		self.showList = []
 
 	def _get_plex_token(self):
@@ -130,13 +130,12 @@ class Plex(object):
 
 
 	def get_movies(self):
-		movieList = []
 		mycommand = "/library/sections/%s/all" % (self.movieKey)
 		movies = self._send_to_plex(mycommand).getElementsByTagName('Video')
 		for movie in movies:
 			newMovie = Movie(movie)
 			self.get_plex_images(newMovie)
-			self.movieList.append(newMovie)
+			self.movieList[newMovie.id] = newMovie
 
 		return True
 
