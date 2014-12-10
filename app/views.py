@@ -8,7 +8,8 @@ def index(type = ""):
 	sb_fails = MYSICKBEARD.find_not_downloaded()
 	sab_fails = MYSABNZBD.get_history_fail()
 
-	return render_template('index.html', shows = MYPLEX.showList, movies = MYPLEX.movieList, sb_fails = sb_fails, sab_fails = sab_fails)
+	return render_template('index.html', shows = MYPLEX.showList, 
+		episodes = MYPLEX.episodeList, movies = MYPLEX.movieList)
 
 @app.route('/shows')
 @app.route('/shows/<all>')
@@ -16,7 +17,7 @@ def shows(all = False):
 	shows = MYPLEX.showList
 	if all:
 		all = True
-	return render_template('index.html', shows = MYPLEX.showList, all = all)
+	return render_template('index.html', shows = MYPLEX.showList, episodes = MYPLEX.episodeList, all = all)
 
 
 @app.route('/movies')
@@ -30,7 +31,7 @@ def movies(all = False):
 def show(id):
 	myShow = []
 	myShow = [show for show in MYPLEX.showList if show.id == id]
-	return render_template('show.html', shows = myShow, all = True)
+	return render_template('show.html', shows = myShow, episodes = MYPLEX.episodeList, all = True)
 
 @app.route('/movie/<id>')
 def movie(id):
@@ -53,27 +54,24 @@ def delete():
 		delete_items = request.values
 		for item in delete_items.keys():
 			if "episode" in item:
-				shows = MYPLEX.showList
-				for show in shows:
-					for episode in show.episodes:
-						if episode.id == delete_items[item]:
-							print "Removing: " + episode.filePath
-							try:
-								if os.path.isfile(episode.filePath):
-									os.remove(episode.filePath)
-									show.episodes.remove(episode)
-									#app.logger.info("Deleted episode: " + episode.filePath + "from disk")
-								else:
-									message = "Error: %s file not found" % episode.filePath
-									print(message)
-									flash(message, 'error')
-							except:
-								pass
-
-
+				episode_id = delete_items[item]
+				episode = MYPLEX.episodeList[episode_id]
+				print "Removing: " + episode.filePath
+				if os.path.isfile(episode.filePath):
+					os.remove(episode.filePath)
+					del MYPLEX.episodeList[episode_id]
+					message = "{0}: {1} was deleted!".format(episode.showName, episode.name)
+					print message
+					flash(message, 'success')
+					#app.logger.info("Deleted episode: " + episode.filePath + "from disk")
+				else:
+					message = "Error: {0} file not found".format(episode.filePath)
+					print(message)
+					flash(message, 'error')
+		
 			elif "movie" in item:
-				item_id = delete_items[item]
-				movie = next(tmp_movie for tmp_movie in MYPLEX.movieList if tmp_movie.id == item_id)
+				movie_id = delete_items[item]
+				movie = MYPLEX.movieList[movie_id]
 				if movie.id == delete_items[item]:
 					print "Removing: " + movie.name
 					try:
@@ -114,5 +112,7 @@ def config():
 				print item + " : " + request.values[item]
 
 	return render_template('config.html', config=app.config)
+
+
 
 

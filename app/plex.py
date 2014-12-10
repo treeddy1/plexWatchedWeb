@@ -23,6 +23,7 @@ class Plex(object):
 		self.get_sections()
 		self.movieList = {}
 		self.showList = []
+		self.episodeList = {}
 
 	def _get_plex_token(self):
 		url = "https://my.plexapp.com/users/sign_in.xml"
@@ -105,7 +106,7 @@ class Plex(object):
 			newShow.seasons = self.get_show_seasons(show.getAttribute('key'))
 
 			for season in newShow.seasons:
-				newShow.episodes = self.get_episode_list(season)
+				self.get_episode_list(newShow.name, season)
 
 			self.showList.append(newShow)
 
@@ -116,17 +117,17 @@ class Plex(object):
 		return seasons
 		
 
-	def get_episode_list(self, season):
+	def get_episode_list(self, showName, season):
 		seasonNumber = season.getAttribute('index')
 		seasonPath = season.getAttribute('key')
-		episodeList = []
+
 		episodes = self._send_to_plex(seasonPath).getElementsByTagName('Video')
 
 		for episode in episodes:
-			episodeNew = Episode(episode, seasonNumber)
-			episodeList.append(episodeNew)
+			episodeNew = Episode(episode, showName, seasonNumber)
+			self.episodeList[episodeNew.id] = episodeNew
 
-		return episodeList
+		return True
 
 
 	def get_movies(self):

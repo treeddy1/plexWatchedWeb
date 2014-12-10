@@ -36,14 +36,14 @@
 
 {% endmacro %}
 
-{% macro display_show(show, all = false) %}
+{% macro display_show(show, episodes, all = false) %}
 
-			{% for episode in show.episodes %}
-				{% if episode.watched or all %}
+			{% for episode in episodes.values() %}
+				{% if episode.showName == show.name and (episode.watched or all) %}
 					<tr>
 					{% if request.endpoint != 'show' %}
 						<td>
-						<a href = "/show/{{show.id}}">{{show.name}}</a>
+						<a href = "/show/{{show.id}}">{{episode.showName}}</a>
 				  		</td>
 				  	{% endif %}
 				  		<td class="centered">

@@ -9,7 +9,7 @@
 				{% for show in shows %}
 					<h2>{{show.name}}</h2>
 					{{ show_table() }}
-					{{ display_show(show, all) }}		
+					{{ display_show(show, episodes, all) }}		
 					{{ show_table_end() }}
 				{% endfor %}		
 			{% endif %}

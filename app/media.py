@@ -45,9 +45,10 @@ class MediaType(object):
 
 class Episode(MediaType):
 
-	def __init__(self, episode, seasonNumber):
+	def __init__(self, episode, showName, seasonNumber):
 		
 		MediaType.__init__(self, episode)
+		self.showName = showName
 		self.season = seasonNumber
 		self.episodeNumber = episode.getAttribute('index')
 		self.airDate = episode.getAttribute('originallyAvailableAt')

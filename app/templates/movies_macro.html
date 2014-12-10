@@ -26,7 +26,7 @@
 	</tfoot>
 
 
-	{% for id, movie in movies.items() %}
+	{% for movie in movies.values() %}
 		{% if movie.watched or all %}
 			<tr>
 				{% if request.endpoint == 'movies' %}
