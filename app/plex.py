@@ -8,6 +8,7 @@ from optparse import OptionParser
 from media import Show, Episode, Movie
 
 class Plex(object):
+
 	def __init__(self, host, username="", password=""):
 		self.host = host
 		self.showKey = 0
@@ -27,6 +28,7 @@ class Plex(object):
 
 	def _get_plex_token(self):
 		url = "https://my.plexapp.com/users/sign_in.xml"
+
 		try:
 			req = urllib2.Request(url, data="")
 			base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
@@ -38,8 +40,6 @@ class Plex(object):
 			result = minidom.parse(response)
 			response.close()
 			self.token =  result.getElementsByTagName('authentication-token')[0].childNodes[0].data
-			return True
-
 
 		except (urllib2.URLError, IOError), e:
 			print "_get_plex_token: Couldn't contact plex service at: " + url 
@@ -73,7 +73,6 @@ class Plex(object):
 			sys.exit()
 
 	def get_plex_images(self, media):
-
 		thumb = self._send_to_plex(media.thumb)
 		fileName = "./app/static/cache/thumb-" + media.id
 		output = open( fileName, 'wb+')
@@ -90,6 +89,7 @@ class Plex(object):
 	def get_sections(self):
 
 		sections = self._send_to_plex('/library/sections/').getElementsByTagName('Directory')
+
 		for section in sections:
 			if section.getAttribute('type') == "show":
 				self.showKey = section.getAttribute('key')
@@ -101,6 +101,7 @@ class Plex(object):
 		showList = []
 		mycommand = "/library/sections/%s/all" % (self.showKey)
 		shows = self._send_to_plex(mycommand).getElementsByTagName('Directory')
+
 		for show in shows:
 			newShow = Show(show)
 			newShow.seasons = self.get_show_seasons(show.getAttribute('key'))
@@ -110,7 +111,6 @@ class Plex(object):
 
 			self.showList.append(newShow)
 
-		return True
 
 	def get_show_seasons(self, showKey):
 		seasons = self._send_to_plex(showKey).getElementsByTagName('Directory')
@@ -127,28 +127,31 @@ class Plex(object):
 			episodeNew = Episode(episode, showName, seasonNumber)
 			self.episodeList[episodeNew.id] = episodeNew
 
-		return True
-
 
 	def get_movies(self):
+
 		mycommand = "/library/sections/%s/all" % (self.movieKey)
 		movies = self._send_to_plex(mycommand).getElementsByTagName('Video')
+		
 		for movie in movies:
 			newMovie = Movie(movie)
 			self.get_plex_images(newMovie)
 			self.movieList[newMovie.id] = newMovie
 
-		return True
 
 	def refesh_library(self):
+
 		sections = []
 		sections.append(self.showKey)
 		sections.append(self.movieKey)
+		
 		for section in sections:
 			mycommand = "/library/sections/%s/refresh" % (section)
 			self._send_to_plex(mycommand)
 
+
 	def clear_cache(self):
+		
 		cache_path = app.static_folder + "/cache"
 		#not done		
 

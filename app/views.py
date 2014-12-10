@@ -74,19 +74,16 @@ def delete():
 				movie = MYPLEX.movieList[movie_id]
 				if movie.id == delete_items[item]:
 					print "Removing: " + movie.name
-					try:
-						if os.path.isfile(movie.filePath):
-							path = os.path.dirname(movie.filePath)
-							shutil.rmtree(path, ignore_errors=False)
-							del MYPLEX.movieList[movie.id]
-							#app.logger.info("Deleted movie: " + movie.filePath + "from disk")
-						else:
-							message = "Error: %s file not found" % movie.filePath
-							print(message)
-							flash(message, 'error')
-					except:
-						pass
-				
+					if os.path.isfile(movie.filePath):
+						path = os.path.dirname(movie.filePath)
+						shutil.rmtree(path, ignore_errors=False)
+						del MYPLEX.movieList[movie.id]
+						#app.logger.info("Deleted movie: " + movie.filePath + "from disk")
+					else:
+						message = "Error: %s file not found" % movie.filePath
+						print(message)
+						flash(message, 'error')
+
 	MYPLEX.refesh_library()
 	return redirect(url_for('index'))
 
