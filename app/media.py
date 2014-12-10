@@ -7,9 +7,7 @@ class Show(object):
 		self.showKey = show.getAttribute('key')
 		self.id = show.getAttribute('ratingKey')
 		self.seasons = []
-		self.episodes = []
-
-
+		
 
 class MediaType(object):
 

@@ -8,3 +8,6 @@ STATIC_FOLDER = 'static'
 PLEX_HOST = '127.0.0.1:32400'
 PLEX_USER = ''
 PLEX_PASSWORD = ''
+
+
+
