@@ -1,8 +1,9 @@
+import logging
 from flask import Flask
 from plex import Plex
 from sickbeard import SickBeard
 from sabnzbd import Sabnzbd
-
+from timeit import Timer
 
 # Create application
 app = Flask(__name__)
@@ -15,6 +16,12 @@ app.config.from_pyfile('application.cfg', silent=True)
 
 # Set Secret key
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+# Initiate logging
+file_handler = logging.FileHandler('./app.log')
+file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.ERROR)
 
 # Load Plex configuration
 PLEX_USER = app.config['PLEX_USER']
