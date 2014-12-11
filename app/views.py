@@ -1,7 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
-from app import app, MYPLEX, MYSICKBEARD, MYSABNZBD
+from app import app, MYPLEX, MYSICKBEARD, MYSABNZBD, LOG_READER
 import os
-from datetime import datetime
 import shutil
 
 @app.route('/')
@@ -111,6 +110,12 @@ def config():
 				print item + " : " + request.values[item]
 
 	return render_template('config.html', config=app.config)
+
+@app.route('/log')
+@app.route('/log/<min_level>')
+def log(min_level="ERROR"):
+	lines = LOG_READER.read_log(min_level)
+	return render_template('log.html', lines = lines)
 
 
 

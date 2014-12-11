@@ -4,6 +4,7 @@ from plex import Plex
 from sickbeard import SickBeard
 from sabnzbd import Sabnzbd
 from timeit import Timer
+from logreader import LogReader
 
 # Create application
 app = Flask(__name__)
@@ -18,10 +19,14 @@ app.config.from_pyfile('application.cfg', silent=True)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 # Initiate logging
-file_handler = logging.FileHandler('./app.log')
-file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
+LOG_FILE = app.config['LOG_FILE']
+file_handler = logging.FileHandler(LOG_FILE)
+file_handler.setFormatter(logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', '%Y-%m-%d %H:%M:%S'))
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.ERROR)
+
+LOG_READER = LogReader(app.config['LOG_FILE'])
+
 
 # Load Plex configuration
 PLEX_USER = app.config['PLEX_USER']
@@ -40,6 +45,7 @@ SABNZBD_HOST = app.config['SABNZBD_HOST']
 MYPLEX = Plex(PLEX_HOST, PLEX_USER, PLEX_PASSWORD)
 MYPLEX.get_shows()
 MYPLEX.get_movies()
+
 
 # Create SB Object
 MYSICKBEARD = SickBeard(SB_HOST, SB_APIKEY)
