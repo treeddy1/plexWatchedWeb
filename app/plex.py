@@ -26,6 +26,7 @@ class Plex(object):
 		self.showList = []
 		self.episodeList = {}
 
+
 	def _get_plex_token(self):
 		url = "https://my.plexapp.com/users/sign_in.xml"
 
@@ -34,7 +35,7 @@ class Plex(object):
 			base64string = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
 			authheader = "Basic %s" % base64string
 			req.add_header("Authorization", authheader)
-			req.add_header("X-Plex-Client-Identifier","myapp")    
+			req.add_header("X-Plex-Client-Identifier","plexWatchedWeb")    
 
 			response = urllib2.urlopen(req)
 			result = minidom.parse(response)
@@ -42,9 +43,9 @@ class Plex(object):
 			self.token =  result.getElementsByTagName('authentication-token')[0].childNodes[0].data
 
 		except (urllib2.URLError, IOError), e:
-			print "_get_plex_token: Couldn't contact plex service at: " + url 
-			print e
-			
+			message = "Error getting Plex Token: {0}".format(e)
+			app.app.logger.error(message)
+
 
 	def _send_to_plex(self, command):
 		url = "http://%s%s" % (self.host, command)
@@ -54,10 +55,9 @@ class Plex(object):
 				if self.token == "":
 					self._get_plex_token()
 					print self.token
-				#logger.log(u"Contacting Plex (with auth header) via url: " + url)     
+				app.app.logger.info("Contacting Plex (with auth header) via url: {0}".format(url))     
 				req.add_header("X-Plex-Token", self.token)
 			response = urllib2.urlopen(req)
-			#print response.headers
 			if response.headers['content-length'] != "0":
 				if response.headers['content-type'] == "text/xml;charset=utf-8":
 					result = minidom.parse(response)
@@ -69,7 +69,8 @@ class Plex(object):
 			return result
 
 		except (urllib2.URLError, IOError), e:
-			print "Warning: Couldn't contact Plex at: " + url 
+			message = "Couldn't contact Plex at: {0}, Error: {1}".format(url, e)
+			app.app.logger.error(message)
 			sys.exit()
 
 	def get_plex_images(self, media):
