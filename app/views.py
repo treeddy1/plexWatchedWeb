@@ -1,6 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash
 from app import app, MYPLEX, MYSICKBEARD, MYSABNZBD
-import os, time, shutil
+import os
+from datetime import datetime
+import shutil
 
 @app.route('/')
 @app.route('/index')
@@ -56,32 +58,33 @@ def delete():
 			if "episode" in item:
 				episode_id = delete_items[item]
 				episode = MYPLEX.episodeList[episode_id]
-				print "Removing: " + episode.filePath
+				message = "Removing: {0}".format(episode.filePath)
+				app.logger.info(message)
 				if os.path.isfile(episode.filePath):
 					os.remove(episode.filePath)
 					del MYPLEX.episodeList[episode_id]
 					message = "{0}: {1} was deleted!".format(episode.showName, episode.name)
-					print message
 					flash(message, 'success')
-					#app.logger.info("Deleted episode: " + episode.filePath + "from disk")
+					app.logger.info("Deleted episode: {0} from disk".format(episode.filePath))
 				else:
-					message = "Error: {0} file not found".format(episode.filePath)
-					print(message)
-					flash(message, 'error')
+						message = "File not found {0}".format(episode.filePath)
+						app.logger.error(message)
+						flash(message, 'error')
 		
 			elif "movie" in item:
 				movie_id = delete_items[item]
 				movie = MYPLEX.movieList[movie_id]
 				if movie.id == delete_items[item]:
-					print "Removing: " + movie.name
+					message = "Removing: {0}".format(movie.name)
+					app.logger.info(message)
 					if os.path.isfile(movie.filePath):
 						path = os.path.dirname(movie.filePath)
 						shutil.rmtree(path, ignore_errors=False)
 						del MYPLEX.movieList[movie.id]
-						#app.logger.info("Deleted movie: " + movie.filePath + "from disk")
+						app.logger.info("Deleted movie: {1} from disk".format(movie.filePath))
 					else:
-						message = "Error: %s file not found" % movie.filePath
-						print(message)
+						message = "File not Found: {0}".format(movie.filePath)
+						app.logger.error(message)
 						flash(message, 'error')
 
 	MYPLEX.refesh_library()
