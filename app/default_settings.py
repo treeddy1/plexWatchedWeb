@@ -1,5 +1,6 @@
 # Default Configuration
 
+LOG_FILE = './app.log'
 DEBUG = False
 TESTING = False
 IP = '0.0.0.0'
