@@ -67,9 +67,9 @@ def delete():
 					flash(message, 'success')
 					app.logger.info("Deleted episode: {0} from disk".format(episode.filePath))
 				else:
-						message = "File not found {0}".format(episode.filePath)
-						app.logger.error(message)
-						flash(message, 'error')
+					message = "File not found {0}".format(episode.filePath)
+					app.logger.error(message)
+					flash(message, 'error')
 		
 			elif "movie" in item:
 				movie_id = delete_items[item]
