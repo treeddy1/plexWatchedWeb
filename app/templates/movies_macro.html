@@ -16,7 +16,11 @@
 	</thead>
 	<tfoot>
 		<tr>
+			{% if request.endpoint == 'movies' %}
 			<td rowspan="1" colspan="4" class="align-right">
+			{% else %}
+			<td rowspan="1" colspan="3" class="align-right">
+			{% endif %}
 				<input type="submit" value="Delete" id="submitEpisodeDelete" class="btn" onclick="return confirm('Are you sure you want to delete');" />
 			</td>
 			<td class="centered">
