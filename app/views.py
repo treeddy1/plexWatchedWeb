@@ -42,8 +42,7 @@ def movie(id):
 
 @app.route('/update')
 def update():
-	MYPLEX.movieList.clear()
-	MYPLEX.showList[:] =[]
+	MYPLEX.clear_lists()
 	MYPLEX.get_movies()
 	MYPLEX.get_shows()
 	return redirect(url_for('index'))

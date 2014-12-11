@@ -28,9 +28,7 @@
 					{% with messages = get_flashed_messages(with_categories=true) %}
 						{% if messages %}
 							{% for category, message in messages %}
-							{% if category == 'error' %}
-								<div class="errormsgbox">{{ message }}</div>
-							{% endif %}
+								<div class="{{category}}-msgbox">{{ message }}</div>
 							{% endfor %}
 						{% endif %}
 					{% endwith %}

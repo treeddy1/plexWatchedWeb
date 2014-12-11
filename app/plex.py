@@ -150,6 +150,14 @@ class Plex(object):
 			mycommand = "/library/sections/%s/refresh" % (section)
 			self._send_to_plex(mycommand)
 
+	def clear_lists(self):
+		app.logger.info("Clearing stored movie list")
+		self.movieList.clear()
+		app.logger.info("Clearing Stored Show list")
+		self.showList[:] =[]
+		app.logger.info("Clearing stored episode list")
+		self.episodeList.clear()
+
 
 	def clear_cache(self):
 		
