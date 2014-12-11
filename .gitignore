@@ -6,3 +6,4 @@ app/application.cfg
 .todo
 *.pyc
 clean.py
+app.log.test
