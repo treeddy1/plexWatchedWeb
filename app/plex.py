@@ -3,13 +3,16 @@ import urllib2
 import base64
 import sys
 import app
+from app import db
 from xml.dom import minidom
 from optparse import OptionParser
 from media import Show, Episode, Movie
 
-class Plex(object):
 
-	def __init__(self, host, username="", password=""):
+class Plex(db.Model):
+	
+	def __init__(self, label, host, username="", password=""):
+		self.label = label
 		self.host = host
 		self.showKey = 0
 		self.movieKey = 0
@@ -22,9 +25,9 @@ class Plex(object):
 			self.authRequired = False
 
 		self.get_sections()
-		self.movieList = {}
-		self.showList = []
-		self.episodeList = {}
+		#self.movieList = {}
+		#self.showList = []
+		#self.episodeList = {}
 
 
 	def _get_plex_token(self):
@@ -88,7 +91,6 @@ class Plex(object):
 
 
 	def get_sections(self):
-
 		sections = self._send_to_plex('/library/sections/').getElementsByTagName('Directory')
 
 		for section in sections:
@@ -108,7 +110,7 @@ class Plex(object):
 			newShow.seasons = self.get_show_seasons(show.getAttribute('key'))
 
 			for season in newShow.seasons:
-				self.get_episode_list(newShow.name, season)
+				self.get_episodes(newShow.name, season)
 
 			self.showList.append(newShow)
 
@@ -118,7 +120,7 @@ class Plex(object):
 		return seasons
 		
 
-	def get_episode_list(self, showName, season):
+	def get_episodes(self, showName, season):
 		seasonNumber = season.getAttribute('index')
 		seasonPath = season.getAttribute('key')
 
@@ -126,22 +128,23 @@ class Plex(object):
 
 		for episode in episodes:
 			episodeNew = Episode(episode, showName, seasonNumber)
-			self.episodeList[episodeNew.id] = episodeNew
-
+			db.session.add(episodeNew)
+			#self.episodeList[episodeNew.id] = episodeNew
+		db.session.commit()
 
 	def get_movies(self):
-
 		mycommand = "/library/sections/%s/all" % (self.movieKey)
 		movies = self._send_to_plex(mycommand).getElementsByTagName('Video')
 		
 		for movie in movies:
 			newMovie = Movie(movie)
 			self.get_plex_images(newMovie)
-			self.movieList[newMovie.id] = newMovie
+			db.session.add(newMovie)
+			#self.movieList[newMovie.id] = newMovie
+		db.session.commit()
 
 
 	def refesh_library(self):
-
 		sections = []
 		sections.append(self.showKey)
 		sections.append(self.movieKey)

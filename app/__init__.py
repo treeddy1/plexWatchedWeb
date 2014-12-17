@@ -1,13 +1,15 @@
 import logging
 from flask import Flask
-from plex import Plex
+from flask.ext.sqlalchemy import SQLAlchemy
 from sickbeard import SickBeard
 from sabnzbd import Sabnzbd
 from timeit import Timer
 from logreader import LogReader
 
+
 # Create application
 app = Flask(__name__)
+
 
 # Setup Default Configuration
 app.config.from_object('app.default_settings')
@@ -24,9 +26,10 @@ file_handler = logging.FileHandler(LOG_FILE)
 file_handler.setFormatter(logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', '%Y-%m-%d %H:%M:%S'))
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.ERROR)
-
 LOG_READER = LogReader(app.config['LOG_FILE'])
 
+# Create DB Connetor
+db = SQLAlchemy(app)
 
 # Load Plex configuration
 PLEX_USER = app.config['PLEX_USER']
@@ -42,9 +45,11 @@ SABNZBD_APIKEY = app.config['SABNZBD_APIKEY']
 SABNZBD_HOST = app.config['SABNZBD_HOST']
 
 # Create Plex Object
-MYPLEX = Plex(PLEX_HOST, PLEX_USER, PLEX_PASSWORD)
-MYPLEX.get_shows()
-MYPLEX.get_movies()
+from plex import Plex
+#MYPLEX = Plex("test", PLEX_HOST, PLEX_USER, PLEX_PASSWORD)
+#MYPLEX.get_shows()
+#MYPLEX.get_movies()
+PLEX_SERVERS = Plex.query.first()
 
 
 # Create SB Object
